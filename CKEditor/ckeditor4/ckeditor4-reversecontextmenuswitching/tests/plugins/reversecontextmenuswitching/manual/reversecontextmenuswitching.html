@@ -1,0 +1,72 @@
+<h2>Editor</h2>
+<textarea id="editor1">&lt;p&gt;The more a thing tends to be permanent, the more it tends to be lifeleess.&lt;/p&gt;</textarea>
+
+
+<script>
+	// No console support on mobiles (without connecting to another device).
+	if ( bender.tools.env.mobile ) {
+		bender.ignore();
+	}
+
+	( function() {
+			editor1 = CKEDITOR.replace( 'editor1', {
+				resize_dir: 'both'
+			} );
+			editor1.on( 'instanceReady', function() {
+				range = editor1.getSelection().getRanges()[ 0 ];
+			} );
+		}() );
+		//console.write('test outside of function');
+		/*
+range2.setEnd(element.getFirst(), startIndex + findString.length);
+var ir2 = range2.length;
+
+var sel = editor1.getSelection(),
+	ranges1 = sel.selectRanges( [ range2 ] );
+
+debugger;
+//var editor = CKEDITOR.instances["id_corpo"];
+
+//var node = element.node;
+//var sel = editor1.getSelection();
+//var element = sel.getStartElement();
+//sel.selectElement(element);
+//var ranges = editor1.getSelection().getRanges;
+var ranges;// = editor1.getSelection().getRanges;
+var range1 = editor1.createRange();
+range1.selectNodeContents( editor1.editable() );
+sel.selectRanges( [ range ] );
+
+//var startIndex = element.getHtml().indexOf(findString);
+//range.moveToPosition( range.root, CKEDITOR.POSITION_BEFORE_END );
+
+//editor1.getSelection().selectRanges( [ ranges ] );
+//var ranges = editor1.getSelection().selectRanges( [ ranges ] );
+
+if (startIndex != -1) {
+	//range.startIndex(element.getFirst(), startIndex);
+	range1.setStart(element.getFirst(), startIndex);
+	range1.setEnd(element.getFirst(), 80);
+//    ranges[0].setStart(element.getFirst(), startIndex);
+//    ranges[0].setEnd(element.getFirst(), startIndex + findString.length);
+	editor1.getSelection().selectRanges([range1]);
+	//alert(sel);
+}
+//alert(startIndex);
+//alert(editor1.getSelection());
+
+				// editor1.on( 'resize', function( e ) {
+				// 	//storage = e.data;
+				// } );
+
+				// if ( storage ) {
+				// 	editor1.resize( storage.outerWidth, storage.outerHeight );
+				// }
+			} );
+		}() );
+
+		//console.write('test outside of function');
+*/
+</script>
+
+
