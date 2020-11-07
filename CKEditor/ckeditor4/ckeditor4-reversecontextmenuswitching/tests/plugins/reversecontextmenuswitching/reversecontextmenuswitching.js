@@ -1,181 +1,87 @@
-/* bender-tags: widgetcore */
-/* bender-ckeditor-plugins: widget,contextmenu */
-/* bender-include: _helpers/tools.js */
-/* global widgetTestsTools */
+/* bender-tags: editor */
+/* bender-ckeditor-plugins: wysiwygarea, toolbar, elementspath, resize, contextmenu*/
 
-( function() {
-	'use strict';
+// bender.editor = {
+// 	config: {
+// 		autoParagraph: false,
+// 		allowedContent: true
+// 	}
+// };
 
-	bender.editor = {
+bender.editors = {
+	reversecontextmenuswitching: {
+		name: 'editor1',
+		creator: 'inline',
 		config: {
-			allowedContent: true,
-			on: {
-				instanceReady: function( evt ) {
-					evt.editor.dataProcessor.writer.sortAttributes = 1;
-
-					evt.editor.widgets.add( 'testwidget', {} );
-				}
-			}
+			extraPlugins: 'reversecontextmenuswitching'
 		}
-	};
+	},
+};
 
-	var getWidgetById = widgetTestsTools.getWidgetById;
+bender.test( {
+    'test editor with right click spell checker': function() {
+        var ed = this.editor, bot = this.editorBot;
+        //CKEDITOR.document.
+        //bot.reversecontextmenuswitching('this is a tessst');
+        // var editor = this.editors.reversecontextmenuswitching,
+        //     describedBy = editor.editable().getAttribute( 'aria-describedby' );
+        var bot = this.editor.bot;
+        
+        //assert.isNotNull( describedBy, 'editable has aria-describedby attribute' );
+        //var label = CKEDITOR.document.getById( describedBy );
+        //assert.isNotNull( label, 'label element exists' );
+        var misspelledword = "tesst";
+        ed.document.body = misspelledword;
+        var expectedReplacement = "test";
+        var replacedWord = "";
 
-	bender.test( {
-		// (#1901)
-		'test SHIFT + F10 shortcut upon widget focus': function() {
-			var editor = this.editor;
+        this.editor.execCommand( 'rightClick' );
+        this.editor.execCommand( 'enter' );
+        this.editor.execCommand( 'enter' );
+        var replacedWord = ed.document.getBody().getText();
+        assert.areSame( expectedReplacement, replacedWord, 'Replaced Word is not expected.' );
+    },
 
-			editor.widgets.add( 'testevent', {
-				editables: {
-					foo: '.foo'
-				}
-			} );
+    'test editor without a11y plugin has aria-describedby': function() {
+        // var editor = this.editors.withoutA11y,
+        //     describedBy = editor.editable().getAttribute( 'aria-describedby' );
 
-			this.editorBot.setData(
-				'<p id="p1">foo</p><div data-widget="testevent" id="w1"><p class="foo">foo</p></div>',
-				function() {
-					var widget = getWidgetById( editor, 'w1' ),
-						spy = sinon.spy();
+        assert.isNull( describedBy, 'editable does not have aria-describedby attribute' );
+    }
+} );
 
-					widget.on( 'contextMenu', spy );
-					widget.focus();
 
-					editor.editable().fire( 'keydown', new CKEDITOR.dom.event( { keyCode: CKEDITOR.SHIFT + 121 } ) );
 
-					assert.isTrue( spy.calledOnce );
-				}
-			);
-		},
+// ( function() {
+// 	'use strict';
 
-		'test CTRL + SHIFT + F10 shortcut upon widget focus': function() {
-			var editor = this.editor;
+// 	bender.editors = {
+// 		reversecontextmenuswitching: {
+// 			name: 'editor1',
+// 			creator: 'inline',
+// 			config: {
+// 				extraPlugins: 'reversecontextmenuswitching'
+// 			}
+// 		},
+// 	};
 
-			editor.widgets.add( 'testevent', {
-				editables: {
-					foo: '.foo'
-				}
-			} );
+// 	bender.test( {
+// 		'test editor with right click spell checker': function() {
+// 			var editor = this.editors.reversecontextmenuswitching,
+// 				describedBy = editor.editable().getAttribute( 'aria-describedby' );
+//             var bot = this.editor.bot;
+//             this.
+// 			assert.isNotNull( describedBy, 'editable has aria-describedby attribute' );
+// 			var label = CKEDITOR.document.getById( describedBy );
+// 			assert.isNotNull( label, 'label element exists' );
+// 			assert.areSame( editor.lang.common.editorHelp, label.getHtml(), 'label\'s content' );
+// 		},
 
-			this.editorBot.setData(
-				'<p id="p1">foo</p><div data-widget="testevent" id="w1"><p class="foo">foo</p></div>',
-				function() {
-					var widget = getWidgetById( editor, 'w1' ),
-						spy = sinon.spy();
+// 		'test editor without a11y plugin has aria-describedby': function() {
+// 			var editor = this.editors.withoutA11y,
+// 				describedBy = editor.editable().getAttribute( 'aria-describedby' );
 
-					widget.on( 'contextMenu', spy );
-					widget.focus();
-
-					editor.editable().fire( 'keydown', new CKEDITOR.dom.event( { keyCode: CKEDITOR.CTRL + CKEDITOR.SHIFT + 121 } ) );
-
-					assert.isTrue( spy.calledOnce );
-				}
-			);
-		},
-
-		'test contextMenu event firing': function() {
-			var editor = this.editor;
-
-			editor.widgets.add( 'testevent', {
-				editables: {
-					foo: '.foo'
-				}
-			} );
-
-			this.editorBot.setData(
-				'<p id="p1">foo</p><div data-widget="testevent" id="w1"><p class="foo">foo</p></div>' +
-				'<p id="p2">foo</p><div data-widget="testevent" id="w2"><p class="foo">foo</p></div>',
-				function() {
-					var w1 = getWidgetById( editor, 'w1' ),
-						w2 = getWidgetById( editor, 'w2' ),
-						p1 = editor.document.getById( 'p1' ),
-						p2 = editor.document.getById( 'p2' ),
-						eFoo1 = w1.editables.foo,
-						opened = '',
-						range = editor.createRange();
-
-					editor.focus();
-
-					w1.on( 'contextMenu', function() {
-						opened += '1';
-					} );
-					w2.on( 'contextMenu', function() {
-						opened += '2';
-					} );
-
-					range.setStart( p1, 0 );
-					range.collapse( true );
-					range.select();
-
-					editor.contextMenu.open( editor.editable() );
-					editor.contextMenu.hide();
-					assert.areSame( '', opened, 'events were not fired - #p1' );
-
-					range.setStart( p1, 0 );
-					range.setEnd( p2, 1 );
-					range.select();
-
-					editor.contextMenu.open( editor.editable() );
-					editor.contextMenu.hide();
-					assert.areSame( '', opened, 'events were not fired - #p1 to #p2' );
-
-					w1.focus();
-					editor.contextMenu.open( editor.editable() );
-					editor.contextMenu.hide();
-					assert.areSame( '1', opened, 'ctxmenu on #w1' );
-
-					w2.focus();
-					editor.contextMenu.open( editor.editable() );
-					editor.contextMenu.hide();
-					assert.areSame( '12', opened, 'ctxmenu on #w2' );
-
-					eFoo1.focus();
-					range.setStart( eFoo1, 0 );
-					range.collapse( true );
-					range.select();
-
-					editor.contextMenu.open( editor.editable() );
-					editor.contextMenu.hide();
-					assert.areSame( '12', opened, 'events were not fired - #w1.foo' );
-				}
-			);
-		},
-
-		'test contextMenu passing a data': function() {
-			var editor = this.editor;
-
-			editor.widgets.add( 'testdata', {} );
-
-			this.editorBot.setData( '<p>foo</p><div data-widget="testdata" id="w1">foo</div>', function() {
-				var w1 = getWidgetById( editor, 'w1' );
-
-				w1.on( 'contextMenu', function( evt ) {
-					evt.data.testData = CKEDITOR.TRISTATE_OFF;
-				} );
-
-				editor.addCommand( 'testData', {} );
-
-				editor.addMenuItems( {
-					testData: {
-						label: 'Foo',
-						command: 'testData',
-						group: 'image'
-					}
-				} );
-
-				w1.focus();
-
-				editor.contextMenu.open( editor.editable() );
-
-				var itemsExist = 0;
-				for ( var i = 0; i < editor.contextMenu.items.length; ++i )
-					if ( editor.contextMenu.items[ i ].command == 'testData' )
-						itemsExist += 1;
-
-				editor.contextMenu.hide();
-
-				assert.areSame( 1, itemsExist, 'there is one testData item in context menu' );
-			} );
-		}
-	} );
-} )();
+// 			assert.isNull( describedBy, 'editable does not have aria-describedby attribute' );
+// 		}
+// 	} );
+// } )();

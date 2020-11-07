@@ -664,12 +664,12 @@ CKEDITOR.config.disableNativeTableHandles = true;
  * is enabled or you are simply not using the
  * [context menu](https://ckeditor.com/cke4/addon/contextmenu) plugin.
  *
- *		config.disableNativeSpellChecker = false;
+ *  config.disableNativeSpellChecker = false;
  *
  * @cfg
  * @member CKEDITOR.config
  */
-CKEDITOR.config.disableNativeSpellChecker = true;
+CKEDITOR.config.disableNativeSpellChecker = false;
 
 /**
  * Language code of  the writing language which is used to author the editor

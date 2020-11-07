@@ -46,6 +46,7 @@
 		"url": "https://github.com/ckeditor/ckeditor4.git"
 	},
 	"dependencies": {
-		"gulp": "^4.0.2"
+		"gulp": "^4.0.2",
+		"phantomjs": "^2.1.7"
 	}
 }
