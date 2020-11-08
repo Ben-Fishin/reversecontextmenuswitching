@@ -1,22 +1,27 @@
 /* bender-tags: editor */
 /* bender-ckeditor-plugins: wysiwygarea, toolbar, elementspath, resize, contextmenu*/
 
-// bender.editor = {
-// 	config: {
-// 		autoParagraph: false,
-// 		allowedContent: true
-// 	}
+bender.editor = {
+	config: {
+		autoParagraph: false,
+        allowedContent: true,
+        disableNativeSpellChecker: false
+	}
+};
+
+// bender.editors = {
+// 	reversecontextmenuswitching: {
+// 		name: 'editor1',
+// 		creator: 'inline',
+// 		config: {
+//             extraPlugins: 'reversecontextmenuswitching',
+//             disableNativeSpellChecker: false
+// 		}
+// 	},
 // };
 
-bender.editors = {
-	reversecontextmenuswitching: {
-		name: 'editor1',
-		creator: 'inline',
-		config: {
-			extraPlugins: 'reversecontextmenuswitching'
-		}
-	},
-};
+var RButton = 2,
+	Enter = 13;
 
 bender.test( {
     'test editor with right click spell checker': function() {
@@ -34,10 +39,27 @@ bender.test( {
         ed.document.body = misspelledword;
         var expectedReplacement = "test";
         var replacedWord = "";
-
-        this.editor.execCommand( 'rightClick' );
-        this.editor.execCommand( 'enter' );
-        this.editor.execCommand( 'enter' );
+        this.editor.setKeystroke( 2, 'testcommand' );
+        this.editor.setKeystroke( 13, 'testcommand' );
+        this.editor.setKeystroke( 13, 'testcommand' );
+        this.editor.editable().fire( 'keydown', new CKEDITOR.dom.event( {
+			keyCode: 2
+			//ctrlKey: keyModifiers & CKEDITOR.CTRL,
+			//shiftKey: keyModifiers & CKEDITOR.SHIFT
+        } ) );
+        this.editor.editable().fire( 'keydown', new CKEDITOR.dom.event( {
+			keyCode: 13
+			//ctrlKey: keyModifiers & CKEDITOR.CTRL,
+			//shiftKey: keyModifiers & CKEDITOR.SHIFT
+        } ) );
+        this.editor.editable().fire( 'keydown', new CKEDITOR.dom.event( {
+			keyCode: 13
+			//ctrlKey: keyModifiers & CKEDITOR.CTRL,
+			//shiftKey: keyModifiers & CKEDITOR.SHIFT
+		} ) );
+        // this.editor.execCommand( 'rightClick' );
+        // this.editor.execCommand( 'enter' );
+        // this.editor.execCommand( 'enter' );
         var replacedWord = ed.document.getBody().getText();
         assert.areSame( expectedReplacement, replacedWord, 'Replaced Word is not expected.' );
     },

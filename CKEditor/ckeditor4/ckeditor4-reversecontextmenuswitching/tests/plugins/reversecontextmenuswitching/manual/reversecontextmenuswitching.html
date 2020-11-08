@@ -1,6 +1,5 @@
-<h2>Editor</h2>
+<h2>Spell Check Manual Test - Right Click should use native browser spell check.</h2>
 <textarea id="editor1">&lt;p&gt;The more a thing tends to be permanent, the more it tends to be lifeleess.&lt;/p&gt;</textarea>
-<button id="create"><span>Create editor</span></button>
 
 <script>
 	// No console support on mobiles (without connecting to another device).
@@ -13,49 +12,5 @@
 				resize_dir: 'both',
 				disableNativeSpellChecker: false
 			} );
-
-			editor1.on( 'instanceReady', function() {
-				//range = editor1.getSelection().getRanges()[ 0 ];
-
-				alert(CKEDITOR.instances.editor1.document.getBody().getText());
-				CKEDITOR.instances.editor1.execCommand( 'selectAll' );
-
-				// var findString = 'permanent';
-				// var editor = CKEDITOR.instances["id_corpo"];
-				// var sel = editor1.getSelection();
-				// var element = sel.getStartElement();
-				// sel.selectElement(element);
-				// var ranges = CKEDITOR.instances.editor1.getSelection().getRanges();
-				// var startIndex = element.getHtml().indexOf(findString);
-				// if (startIndex != -1) {
-				// 	ranges[0].setStart(element.getFirst(), startIndex);
-				// 	ranges[0].setEnd(element.getFirst(), startIndex + findString.length);
-				// 	sel.selectRanges([ranges[0]]);
-				// 	alert(sel);
-				// }
-				
-				
-				//alert(startIndex);
-				
-				
-				// editor1.on( 'resize', function( e ) {
-				// 	//storage = e.data;
-				// } );
-
-				// if ( storage ) {
-				// 	editor1.resize( storage.outerWidth, storage.outerHeight );
-				// }
-			} );
-			
-			// function createEditor() {
-			// editor1 = CKEDITOR.replace( 'editor1', {
-			// 	resize_dir: 'both'
-			// } );
-
-
-		//}
-		//createEditor();
 		}() );
-
-		//console.write('test outside of function');
 </script>
